@@ -49,7 +49,7 @@ export default function Dashboard() {
         <div className="flex flex-col gap-4 z-10 w-full md:w-1/2">
           <div>
             <span className="font-label text-xs text-primary bg-primary-container/20 px-2 py-1 rounded-full inline-block mb-2">Week {getCurrentWeekNumber()}</span>
-            <h2 className="font-display text-4xl font-semibold text-on-surface">Welcome back.</h2>
+            <h2 className="font-display text-4xl font-semibold text-on-surface">Hi, {settings?.name ? settings.name.split(' ')[0] : 'there'}! 👋</h2>
             <p className="font-body text-lg text-secondary mt-1">You're making solid progress this week.</p>
           </div>
           <div className="flex gap-4 mt-2">

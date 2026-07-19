@@ -54,7 +54,7 @@ export default function Layout() {
           </div>
           <div>
             <h1 className="font-display text-2xl font-bold text-primary">LifeOS</h1>
-            <p className="font-label text-xs text-secondary">Productivity</p>
+            <p className="font-label text-xs text-secondary">{settings?.name ? `${settings.name.split(' ')[0]}'s Workspace` : 'Productivity'}</p>
           </div>
         </div>
         
