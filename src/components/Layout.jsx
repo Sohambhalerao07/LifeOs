@@ -8,6 +8,7 @@ import ProfileModal from './ProfileModal';
 import NotificationsPanel from './NotificationsPanel';
 import { useApi } from '../hooks/useApi';
 import { useTheme } from '../hooks/useTheme';
+import { useProfile } from '../hooks/useProfile';
 
 const navItems = [
   { name: 'Dashboard', path: '/', icon: LayoutDashboard },
@@ -24,6 +25,7 @@ export default function Layout() {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const { data: settings, updateItem: updateSettings } = useApi('settings');
+  const { profile } = useProfile();
   const { data: tasks } = useApi('tasks');
   const { isDark, toggleTheme } = useTheme();
 
@@ -54,7 +56,7 @@ export default function Layout() {
           </div>
           <div>
             <h1 className="font-display text-2xl font-bold text-primary">LifeOS</h1>
-            <p className="font-label text-xs text-secondary">{settings?.name ? `${settings.name.split(' ')[0]}'s Workspace` : 'Productivity'}</p>
+            <p className="font-label text-xs text-secondary">{profile.name ? `${profile.name.split(' ')[0]}'s Workspace` : 'Productivity'}</p>
           </div>
         </div>
         
@@ -154,7 +156,7 @@ export default function Layout() {
               <img 
                 alt="User Profile" 
                 className="w-full h-full object-cover" 
-                src={settings?.avatarUrl || "https://lh3.googleusercontent.com/aida-public/AB6AXuC3WQYrL0OBvTT4Fo3BEaCpmF5Tt1Pt7K4OCGo2plIQR9qFsCXAi147bLovUbowOl-LLUxPfO0FHax6pQizInmSK5qSNJwC9YiddweDrZJaNIr2TWRsoQHZjxNCp6cBRu5AZf38_d-jN9uBDPLjlnERAFw2Wplx7bvEreShKgalY_4fBPDhE1vnVV9iIfXu-KgvJJh1PCT_hypK94WzfJk8AL2RdA0me3W0lcciwINKxiXwBnLrZ5bCOU_gMaNfO0oN9Fb-pbybBw"} 
+                src={profile.avatarUrl || "https://lh3.googleusercontent.com/aida-public/AB6AXuC3WQYrL0OBvTT4Fo3BEaCpmF5Tt1Pt7K4OCGo2plIQR9qFsCXAi147bLovUbowOl-LLUxPfO0FHax6pQizInmSK5qSNJwC9YiddweDrZJaNIr2TWRsoQHZjxNCp6cBRu5AZf38_d-jN9uBDPLjlnERAFw2Wplx7bvEreShKgalY_4fBPDhE1vnVV9iIfXu-KgvJJh1PCT_hypK94WzfJk8AL2RdA0me3W0lcciwINKxiXwBnLrZ5bCOU_gMaNfO0oN9Fb-pbybBw"} 
               />
             </div>
           </div>

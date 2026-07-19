@@ -11,6 +11,7 @@ export default function DailyPlanner() {
   const { openAddModal } = useOutletContext();
   const { data: tasks, loading, updateItem, deleteItem } = useApi('tasks');
   const { data: stats } = useApi('stats');
+  const { data: settings } = useApi('settings');
   const [searchParams] = useSearchParams();
   const [taskToEdit, setTaskToEdit] = useState(null);
   const [showCompleted, setShowCompleted] = useState(false);
@@ -74,7 +75,7 @@ export default function DailyPlanner() {
                 <ChevronRight className="w-5 h-5" />
               </button>
             </div>
-            <p className="font-body text-lg text-on-surface-variant">You're making great progress today.</p>
+            <p className="font-body text-lg text-on-surface-variant">{settings?.affirmation || "You're making great progress today."}</p>
             
             <div className="flex gap-4 pt-4">
               <div className="flex flex-col">

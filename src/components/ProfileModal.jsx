@@ -1,21 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { X, Loader2, User } from 'lucide-react';
+import { useProfile } from '../hooks/useProfile';
 
 export default function ProfileModal({ isOpen, onClose, settings, onSave }) {
+  const { profile, setProfile } = useProfile();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    name: 'Soham',
-    avatarUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC3WQYrL0OBvTT4Fo3BEaCpmF5Tt1Pt7K4OCGo2plIQR9qFsCXAi147bLovUbowOl-LLUxPfO0FHax6pQizInmSK5qSNJwC9YiddweDrZJaNIr2TWRsoQHZjxNCp6cBRu5AZf38_d-jN9uBDPLjlnERAFw2Wplx7bvEreShKgalY_4fBPDhE1vnVV9iIfXu-KgvJJh1PCT_hypK94WzfJk8AL2RdA0me3W0lcciwINKxiXwBnLrZ5bCOU_gMaNfO0oN9Fb-pbybBw',
+    name: profile?.name || 'Soham',
+    avatarUrl: profile?.avatarUrl || 'https://lh3.googleusercontent.com/aida-public/AB6AXuC3WQYrL0OBvTT4Fo3BEaCpmF5Tt1Pt7K4OCGo2plIQR9qFsCXAi147bLovUbowOl-LLUxPfO0FHax6pQizInmSK5qSNJwC9YiddweDrZJaNIr2TWRsoQHZjxNCp6cBRu5AZf38_d-jN9uBDPLjlnERAFw2Wplx7bvEreShKgalY_4fBPDhE1vnVV9iIfXu-KgvJJh1PCT_hypK94WzfJk8AL2RdA0me3W0lcciwINKxiXwBnLrZ5bCOU_gMaNfO0oN9Fb-pbybBw',
+    affirmation: "You're making solid progress this week.",
   });
 
   useEffect(() => {
     if (settings) {
-      setFormData({
-        name: settings.name || 'Soham',
-        avatarUrl: settings.avatarUrl || 'https://lh3.googleusercontent.com/aida-public/AB6AXuC3WQYrL0OBvTT4Fo3BEaCpmF5Tt1Pt7K4OCGo2plIQR9qFsCXAi147bLovUbowOl-LLUxPfO0FHax6pQizInmSK5qSNJwC9YiddweDrZJaNIr2TWRsoQHZjxNCp6cBRu5AZf38_d-jN9uBDPLjlnERAFw2Wplx7bvEreShKgalY_4fBPDhE1vnVV9iIfXu-KgvJJh1PCT_hypK94WzfJk8AL2RdA0me3W0lcciwINKxiXwBnLrZ5bCOU_gMaNfO0oN9Fb-pbybBw',
-      });
+      setFormData(prev => ({
+        ...prev,
+        name: profile?.name || 'Soham',
+        avatarUrl: profile?.avatarUrl || 'https://lh3.googleusercontent.com/aida-public/AB6AXuC3WQYrL0OBvTT4Fo3BEaCpmF5Tt1Pt7K4OCGo2plIQR9qFsCXAi147bLovUbowOl-LLUxPfO0FHax6pQizInmSK5qSNJwC9YiddweDrZJaNIr2TWRsoQHZjxNCp6cBRu5AZf38_d-jN9uBDPLjlnERAFw2Wplx7bvEreShKgalY_4fBPDhE1vnVV9iIfXu-KgvJJh1PCT_hypK94WzfJk8AL2RdA0me3W0lcciwINKxiXwBnLrZ5bCOU_gMaNfO0oN9Fb-pbybBw',
+        affirmation: settings.affirmation || prev.affirmation,
+      }));
     }
-  }, [settings]);
+  }, [settings, profile]);
 
   if (!isOpen) return null;
 
@@ -24,7 +29,8 @@ export default function ProfileModal({ isOpen, onClose, settings, onSave }) {
     setLoading(true);
 
     try {
-      await onSave(null, formData);
+      setProfile({ name: formData.name, avatarUrl: formData.avatarUrl });
+      await onSave(null, { affirmation: formData.affirmation });
       onClose();
     } catch (err) {
       console.error(err);
@@ -80,6 +86,17 @@ export default function ProfileModal({ isOpen, onClose, settings, onSave }) {
               value={formData.avatarUrl}
               onChange={e => setFormData({...formData, avatarUrl: e.target.value})}
               placeholder="https://example.com/photo.jpg"
+            />
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <label className="font-label text-[11px] text-secondary uppercase">Motivation Phrase</label>
+            <input 
+              type="text" 
+              className="bg-surface-container-lowest border border-outline-variant rounded-lg px-4 py-2.5 font-body text-sm text-on-surface focus:outline-none focus:border-primary"
+              value={formData.affirmation}
+              onChange={e => setFormData({...formData, affirmation: e.target.value})}
+              placeholder="e.g. You're making solid progress this week!"
             />
           </div>
 

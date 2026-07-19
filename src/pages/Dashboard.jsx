@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { Flame, ChevronLeft, ChevronRight, CheckCircle2, Check, Clock, Calendar as CalendarIcon, Edit3, Loader2 } from 'lucide-react';
 import { useApi } from '../hooks/useApi';
+import { useProfile } from '../hooks/useProfile';
 import { getCurrentWeekNumber, generateWeekDays, calculateOverallStreak } from '../utils/dateUtils';
 import { clsx } from 'clsx';
 import { useNavigate } from 'react-router-dom';
 
 export default function Dashboard() {
   const { data: settings } = useApi('settings');
+  const { profile } = useProfile();
   const { data: tasks, loading: tasksLoading, updateItem: updateTask } = useApi('tasks');
   const { data: activityFeed, loading: activityLoading } = useApi('activityFeed');
   const { data: habits } = useApi('habits');
@@ -49,8 +51,8 @@ export default function Dashboard() {
         <div className="flex flex-col gap-4 z-10 w-full md:w-1/2">
           <div>
             <span className="font-label text-xs text-primary bg-primary-container/20 px-2 py-1 rounded-full inline-block mb-2">Week {getCurrentWeekNumber()}</span>
-            <h2 className="font-display text-4xl font-semibold text-on-surface">Hi, {settings?.name ? settings.name.split(' ')[0] : 'there'}! 👋</h2>
-            <p className="font-body text-lg text-secondary mt-1">You're making solid progress this week.</p>
+            <h2 className="font-display text-4xl font-semibold text-on-surface">Hi, {profile.name ? profile.name.split(' ')[0] : 'there'}! 👋</h2>
+            <p className="font-body text-lg text-secondary mt-1">{settings?.affirmation || "You're making solid progress this week."}</p>
           </div>
           <div className="flex gap-4 mt-2">
             <div className="bg-surface p-2 rounded-lg border border-outline-variant flex-1">
