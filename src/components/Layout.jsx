@@ -1,16 +1,11 @@
 import React, { useState } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 import { LayoutDashboard, Calendar, CalendarDays, CheckSquare, BarChart2, Settings, HelpCircle, Plus, Menu, Bell, Moon, Sun } from 'lucide-react';
-import { clsx } from 'clsx';
-import { twMerge } from 'tailwind-merge';
+import { cn } from '../utils/classNames';
 import GlobalAddModal from './GlobalAddModal';
 import EditSettingsModal from './EditSettingsModal';
 import { useApi } from '../hooks/useApi';
 import { useTheme } from '../hooks/useTheme';
-
-export function cn(...inputs) {
-  return twMerge(clsx(inputs));
-}
 
 const navItems = [
   { name: 'Dashboard', path: '/', icon: LayoutDashboard },
