@@ -1,0 +1,91 @@
+{
+  "tasks": [
+    {
+      "id": "1",
+      "title": "Finalize Q3 Financial Report",
+      "priority": "High Priority",
+      "category": "Work",
+      "duration": "1h 30m",
+      "completed": false,
+      "recurring": false
+    },
+    {
+      "id": "2",
+      "title": "Review Team Pull Requests",
+      "priority": "Medium",
+      "category": "Engineering",
+      "duration": "45m",
+      "completed": false,
+      "recurring": true
+    },
+    {
+      "id": "3",
+      "title": "Review Q2 Marketing Deck",
+      "time": "2:00 PM",
+      "completed": false
+    },
+    {
+      "id": "4",
+      "title": "Sync with Design Team",
+      "time": "4:30 PM",
+      "completed": false
+    },
+    {
+      "id": "5",
+      "title": "Write Weekly Update",
+      "time": "Tomorrow",
+      "completed": false
+    },
+    {
+      "id": "6",
+      "title": "Email Sarah",
+      "completed": true
+    }
+  ],
+  "habits": [
+    {
+      "id": "1",
+      "title": "Meditation",
+      "completed": true
+    }
+  ],
+  "activityFeed": [
+    {
+      "id": "1",
+      "type": "habit_completed",
+      "text": "Completed habit",
+      "highlight": "Meditation",
+      "time": "2 hours ago"
+    },
+    {
+      "id": "2",
+      "type": "task_added",
+      "text": "Added task",
+      "highlight": "Buy groceries",
+      "time": "5 hours ago"
+    },
+    {
+      "id": "3",
+      "type": "task_completed",
+      "text": "Completed task",
+      "highlight": "Email Sarah",
+      "time": "Yesterday"
+    }
+  ],
+  "stats": {
+    "tasksCompleted": 24,
+    "tasksTotal": 30,
+    "habitsCompleted": 15,
+    "habitsTotal": 20,
+    "streak": 12,
+    "score": 85,
+    "focus": "Deep Work",
+    "reward": "Spa Session"
+  },
+  "habitLogs": [],
+  "settings": {
+    "weeklyGoal": "Launch Beta",
+    "reward": "Dinner at Nobu",
+    "affirmation": "Focus is my superpower"
+  }
+}
