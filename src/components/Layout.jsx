@@ -4,6 +4,8 @@ import { LayoutDashboard, Calendar, CalendarDays, CheckSquare, BarChart2, Settin
 import { cn } from '../utils/classNames';
 import GlobalAddModal from './GlobalAddModal';
 import EditSettingsModal from './EditSettingsModal';
+import ProfileModal from './ProfileModal';
+import NotificationsPanel from './NotificationsPanel';
 import { useApi } from '../hooks/useApi';
 import { useTheme } from '../hooks/useTheme';
 
@@ -19,8 +21,17 @@ export default function Layout() {
   const [addModalState, setAddModalState] = useState({ isOpen: false, date: null });
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const { data: settings, updateItem: updateSettings } = useApi('settings');
+  const { data: tasks } = useApi('tasks');
   const { isDark, toggleTheme } = useTheme();
+
+  // Notification count logic
+  const todayStr = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().split('T')[0];
+  const overdueCount = (tasks || []).filter(t => !t.completed && t.date && t.date < todayStr).length;
+  const upcomingCount = (tasks || []).filter(t => !t.completed && t.date === todayStr && t.time).length;
+  const hasNotifications = (overdueCount + upcomingCount) > 0;
 
   return (
     <div className="flex min-h-screen bg-background text-on-background selection:bg-primary selection:text-on-primary">
@@ -125,12 +136,26 @@ export default function Layout() {
           </div>
           
           <div className="flex items-center gap-4">
-            <button className="text-on-surface-variant hover:text-primary transition-colors scale-95 active:scale-90 relative">
-              <Bell className="w-6 h-6" />
-              <span className="absolute top-0 right-0 w-2 h-2 bg-error rounded-full"></span>
-            </button>
-            <div className="w-8 h-8 rounded-full bg-surface-container-high overflow-hidden border border-outline-variant cursor-pointer hover:border-primary transition-colors">
-              <img alt="User Profile" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3WQYrL0OBvTT4Fo3BEaCpmF5Tt1Pt7K4OCGo2plIQR9qFsCXAi147bLovUbowOl-LLUxPfO0FHax6pQizInmSK5qSNJwC9YiddweDrZJaNIr2TWRsoQHZjxNCp6cBRu5AZf38_d-jN9uBDPLjlnERAFw2Wplx7bvEreShKgalY_4fBPDhE1vnVV9iIfXu-KgvJJh1PCT_hypK94WzfJk8AL2RdA0me3W0lcciwINKxiXwBnLrZ5bCOU_gMaNfO0oN9Fb-pbybBw" />
+            <div className="relative">
+              <button 
+                onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
+                className="text-on-surface-variant hover:text-primary transition-colors scale-95 active:scale-90 relative"
+              >
+                <Bell className="w-6 h-6" />
+                {hasNotifications && <span className="absolute top-0 right-0 w-2 h-2 bg-error rounded-full ring-2 ring-surface-container-lowest"></span>}
+              </button>
+              <NotificationsPanel isOpen={isNotificationsOpen} onClose={() => setIsNotificationsOpen(false)} />
+            </div>
+            
+            <div 
+              onClick={() => setIsProfileModalOpen(true)}
+              className="w-8 h-8 rounded-full bg-surface-container-high overflow-hidden border border-outline-variant cursor-pointer hover:border-primary transition-colors"
+            >
+              <img 
+                alt="User Profile" 
+                className="w-full h-full object-cover" 
+                src={settings?.avatarUrl || "https://lh3.googleusercontent.com/aida-public/AB6AXuC3WQYrL0OBvTT4Fo3BEaCpmF5Tt1Pt7K4OCGo2plIQR9qFsCXAi147bLovUbowOl-LLUxPfO0FHax6pQizInmSK5qSNJwC9YiddweDrZJaNIr2TWRsoQHZjxNCp6cBRu5AZf38_d-jN9uBDPLjlnERAFw2Wplx7bvEreShKgalY_4fBPDhE1vnVV9iIfXu-KgvJJh1PCT_hypK94WzfJk8AL2RdA0me3W0lcciwINKxiXwBnLrZ5bCOU_gMaNfO0oN9Fb-pbybBw"} 
+              />
             </div>
           </div>
         </header>
@@ -148,6 +173,13 @@ export default function Layout() {
       <EditSettingsModal 
         isOpen={isSettingsModalOpen}
         onClose={() => setIsSettingsModalOpen(false)}
+        settings={settings}
+        onSave={updateSettings}
+      />
+
+      <ProfileModal 
+        isOpen={isProfileModalOpen}
+        onClose={() => setIsProfileModalOpen(false)}
         settings={settings}
         onSave={updateSettings}
       />
