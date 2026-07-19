@@ -23,7 +23,8 @@ export default function Dashboard() {
     );
   }
 
-  const upcomingTasks = tasks?.filter(t => !t.completed && t.time) || [];
+  const todayStr = new Date().toISOString().split('T')[0];
+  const upcomingTasks = tasks?.filter(t => !t.completed && t.time && t.date === todayStr) || [];
   const completedTasks = tasks?.filter(t => t.completed) || [];
   const totalTasks = tasks?.length || 0;
   

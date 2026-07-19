@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { PieChart, Flame, Trophy, Droplets, Dumbbell, Flower2, Check, Loader2, ChevronLeft, ChevronRight } from 'lucide-react';
+import { PieChart, Flame, Trophy, Droplets, Dumbbell, Flower2, Check, Loader2, ChevronLeft, ChevronRight, Edit3, Trash2 } from 'lucide-react';
 import { clsx } from 'clsx';
 import { useApi } from '../hooks/useApi';
 import { generateWeekDays } from '../utils/dateUtils';
+import EditHabitModal from '../components/EditHabitModal';
 
 const iconMap = {
   Droplets: Droplets,
@@ -11,9 +12,10 @@ const iconMap = {
 };
 
 export default function Habits() {
-  const { data: habits, loading: habitsLoading } = useApi('habits');
+  const { data: habits, loading: habitsLoading, updateItem: updateHabit, deleteItem: deleteHabit } = useApi('habits');
   const { data: habitLogs, loading: logsLoading, addItem, deleteItem } = useApi('habitLogs');
   const [weekOffset, setWeekOffset] = useState(0);
+  const [habitToEdit, setHabitToEdit] = useState(null);
   
   const baseDate = new Date();
   baseDate.setDate(baseDate.getDate() + weekOffset * 7);
@@ -195,22 +197,37 @@ export default function Habits() {
                     <h3 className="font-body text-lg text-on-surface font-medium">{habit.title}</h3>
                   </div>
                 </div>
-                <div className="flex items-center gap-6">
-                  <div className="flex flex-col items-end">
-                    <span className="font-label text-[11px] text-secondary">Streak</span>
-                    <span className="font-body text-sm font-medium">{streak}d</span>
-                  </div>
-                  <div className="w-24">
-                    <div className="flex justify-between font-label text-[11px] text-secondary mb-1">
-                      <span>W</span>
-                      <span>{weekCompletions}/7</span>
+                  <div className="flex items-center gap-2">
+                    <div className="flex flex-col items-end">
+                      <span className="font-label text-[11px] text-secondary">Streak</span>
+                      <span className="font-body text-sm font-medium">{streak}d</span>
                     </div>
-                    <div className="h-2 w-full bg-surface-container-high rounded-full overflow-hidden">
-                      <div className="h-full bg-primary rounded-full transition-all" style={{ width: `${percent}%` }}></div>
+                    <div className="w-24 ml-4">
+                      <div className="flex justify-between font-label text-[11px] text-secondary mb-1">
+                        <span>W</span>
+                        <span>{weekCompletions}/7</span>
+                      </div>
+                      <div className="h-2 w-full bg-surface-container-high rounded-full overflow-hidden">
+                        <div className="h-full bg-primary rounded-full transition-all" style={{ width: `${percent}%` }}></div>
+                      </div>
+                    </div>
+                    
+                    <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 ml-4 border-l border-outline-variant pl-4">
+                      <button 
+                        onClick={() => setHabitToEdit(habit)}
+                        className="p-1.5 text-secondary hover:text-primary hover:bg-surface-container rounded-md transition-all"
+                      >
+                        <Edit3 className="w-4 h-4" />
+                      </button>
+                      <button 
+                        onClick={() => deleteHabit(habit.id)}
+                        className="p-1.5 text-secondary hover:text-error hover:bg-error-container rounded-md transition-all"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
                     </div>
                   </div>
                 </div>
-              </div>
             );
           })}
           {safeHabits.length === 0 && (
@@ -281,6 +298,13 @@ export default function Habits() {
           </div>
         </div>
       </div>
+
+      <EditHabitModal 
+        isOpen={!!habitToEdit}
+        onClose={() => setHabitToEdit(null)}
+        habit={habitToEdit}
+        onSave={(id, updates) => updateHabit(id, updates)}
+      />
     </div>
   );
 }

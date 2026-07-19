@@ -1,7 +1,7 @@
 import React from 'react';
 import { clsx } from 'clsx';
 
-const hours = Array.from({ length: 16 }, (_, i) => i + 6); // 6 AM to 9 PM
+const hours = Array.from({ length: 24 }, (_, i) => i); // 0 to 23 (24 hours)
 
 function parseTimeToHour(timeStr) {
   if (!timeStr) return null;
@@ -69,7 +69,7 @@ export default function TimeBlockView({ tasks = [], onToggle }) {
             >
               <div className="w-16 flex-shrink-0 px-2 pt-1">
                 <span className="font-label text-[10px] text-secondary">
-                  {hour === 0 ? '12 AM' : hour < 12 ? `${hour} AM` : hour === 12 ? '12 PM' : `${hour - 12} PM`}
+                  {hour.toString().padStart(2, '0')}:00
                 </span>
               </div>
               <div className="flex-1 border-l border-outline-variant/30"></div>
